@@ -35,6 +35,10 @@ Helpers should define a module that maps to their filename. So
 `analytics_helper.rb` defines `AnalyticsHelper`,
 `html/forms_helper.rb` defines `Html::FormsHelper`, and so on.
 
+Templates can render partials. Partials are denoted by a leading
+underscore in their filename. So `<%= render "shared/header" %>` will
+render `app/templates/shared/_header.html.erb` inline.
+
 # Installation
 
     $ gem install brochure
