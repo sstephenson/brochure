@@ -10,6 +10,7 @@ spec = Gem::Specification.new do |s|
   s.files        = ["lib/brochure.rb", "README.md", "LICENSE"]
   s.require_path = "lib"
 
+  s.add_dependency "tilt"
   s.add_development_dependency "rack-test"
 end
 
