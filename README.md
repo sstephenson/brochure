@@ -26,6 +26,11 @@ Sample `config.ru`:
     require "brochure"
     run Brochure::Application.new(File.dirname(__FILE__))
 
+URLs are automatically mapped to template names. So `/` will render
+`app/templates/index.html.erb`, `/signup` will render
+`app/templates/signup.html.erb`, `/help/` will render
+`app/templates/help/index.html.erb`, and so on.
+
 Helpers should define a module that maps to their filename. So
 `analytics_helper.rb` defines `AnalyticsHelper`,
 `html/forms_helper.rb` defines `Html::FormsHelper`, and so on.
