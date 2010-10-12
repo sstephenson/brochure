@@ -34,7 +34,7 @@ Helpers should define a module that maps to their filename. So
 
     $ gem install brochure
 
-    Requires [Tilt](http://github.com/rtomayko/tilt).
+Requires [Tilt](http://github.com/rtomayko/tilt).
 
 # License
 
