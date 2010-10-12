@@ -1,0 +1,2 @@
+require "brochure"
+run Brochure::Application.new(File.dirname(__FILE__))
