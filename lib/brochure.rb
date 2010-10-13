@@ -35,12 +35,11 @@ module Brochure
     def call(env)
       if env["PATH_INFO"].include?("..")
         forbidden
+      elsif result = render(env, env["PATH_INFO"][/[^.]+/])
+        success result
       else
-        logical_path = env["PATH_INFO"][/[^.]+/]
-        success render(env, logical_path)
+        not_found
       end
-    rescue TemplateNotFound => e
-      not_found
     end
 
     def find_template_path(logical_path, options = {})
@@ -65,8 +64,6 @@ module Brochure
         context = @context_class.new(self, env)
         locals  = options[:locals] || {}
         template_for(template_path).render(context, locals)
-      else
-        raise TemplateNotFound, "no such template '#{logical_path}'"
       end
     end
 
@@ -124,7 +121,11 @@ module Brochure
     end
 
     def render(logical_path, locals = {})
-      @application.render(env, logical_path, :partial => true, :locals => locals)
+      if result = @application.render(env, logical_path, :partial => true, :locals => locals)
+        result
+      else
+        raise TemplateNotFound, "no such template '#{logical_path}'"
+      end
     end
   end
 

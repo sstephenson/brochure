@@ -73,4 +73,9 @@ class BrochureTest < Test::Unit::TestCase
     get "/help"
     assert last_response.body["<a href=\"/\">Home</a>"]
   end
+
+  def test_missing_partial_raises_an_error
+    get "/help/partial_error"
+    assert last_response.server_error?
+  end
 end
