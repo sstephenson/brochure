@@ -16,7 +16,7 @@ module Brochure
         module_names = base_name.split("/").map { |n| Brochure.camelize(n) }
         load helper_path
         module_names.inject(Kernel) { |mod, name| mod.const_get(name) }
-      end    
+      end
     end
 
     def call(env)
