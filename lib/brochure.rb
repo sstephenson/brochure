@@ -1,3 +1,4 @@
+require "rack/request"
 require "tilt"
 
 module Brochure
@@ -24,7 +25,7 @@ module Brochure
         forbidden
       else
         logical_path = env["PATH_INFO"][/[^.]+/]
-        success render(logical_path)
+        success render(env, logical_path)
       end
     rescue TemplateNotFound => e
       not_found
@@ -49,9 +50,9 @@ module Brochure
       File.exists?(template_path) && template_path
     end
 
-    def render(logical_path, options = {})
+    def render(env, logical_path, options = {})
       if template_path = find_template_path(logical_path, options)
-        context = @context_class.new(self)
+        context = @context_class.new(self, env)
         locals  = options[:locals] || {}
         template_for(template_path).render(context, locals)
       else
@@ -106,12 +107,19 @@ module Brochure
       context
     end
 
-    def initialize(application)
-      @application = application
+    attr_accessor :application, :env
+
+    def initialize(application, env)
+      self.application = application
+      self.env = env
+    end
+
+    def request
+      @_request ||= Rack::Request.new(env)
     end
 
     def render(logical_path, locals = {})
-      @application.render(logical_path, :partial => true, :locals => locals)
+      @application.render(env, logical_path, :partial => true, :locals => locals)
     end
   end
 

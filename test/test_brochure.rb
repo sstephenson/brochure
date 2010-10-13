@@ -58,6 +58,11 @@ class BrochureTest < Test::Unit::TestCase
     assert_equal 403, last_response.status
   end
 
+  def test_template_has_access_to_request
+    get "/help/search?term=export"
+    assert last_response.body["<h1>Search for \"export\"</h1>"]
+  end
+
   def test_partials_can_be_rendered_from_templates
     get "/help"
     assert last_response.body["<title>Help</title>"]
