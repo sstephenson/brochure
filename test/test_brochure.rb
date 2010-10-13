@@ -2,6 +2,8 @@ require "brochure"
 require "rack/test"
 require "test/unit"
 
+ENV['RACK_ENV'] = 'test'
+
 module Brochure
   class TestApplication < Application
     def warn(*) end
