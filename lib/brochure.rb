@@ -92,10 +92,6 @@ module Brochure
     def forbidden
       respond_with 403, "Forbidden"
     end
-
-    def error(exception)
-
-    end
   end
 
   class Context
