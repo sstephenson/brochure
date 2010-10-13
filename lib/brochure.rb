@@ -1,8 +1,15 @@
 require "rack/request"
+require "rack/utils"
 require "tilt"
 
 module Brochure
   class Application
+    def self.new(*)
+      app = super
+      app = Failsafe.new(app)
+      app
+    end
+
     def initialize(root)
       @app_root      = File.expand_path(root)
       @helper_root   = File.join(@app_root, "app", "helpers")
@@ -29,8 +36,6 @@ module Brochure
       end
     rescue TemplateNotFound => e
       not_found
-    rescue StandardError => e
-      error e
     end
 
     def find_template_path(logical_path, options = {})
@@ -89,12 +94,7 @@ module Brochure
     end
 
     def error(exception)
-      warn ["#{exception.class.name}: #{exception}", *exception.backtrace].join("\n  ")
-      respond_with 500, <<-HTML
-        <!DOCTYPE html>
-        <html><head><title>Internal Server Error</title></head>
-        <body><h1>500 Internal Server Error</h1></body></html>
-      HTML
+
     end
   end
 
@@ -127,5 +127,30 @@ module Brochure
 
   def self.camelize(string)
     string.gsub(/(^|_)(\w)/) { $2.upcase }
+  end
+
+  class Failsafe
+    def initialize(app)
+      @app = app
+    end
+
+    def call(env)
+      @app.call(env)
+    rescue Exception => exception
+      backtrace = ["#{exception.class.name}: #{exception}", *exception.backtrace].join("\n  ")
+      env["rack.errors"].puts(backtrace)
+      env["rack.errors"].flush
+
+      body = <<-HTML
+        <!DOCTYPE html>
+        <html><head><title>Internal Server Error</title></head>
+        <body><h1>500 Internal Server Error</h1></body></html>
+      HTML
+
+      [500,
+       { "Content-Type"   => "text/html, charset=utf-8",
+         "Content-Length" => Rack::Utils.bytesize(body).to_s },
+       [body]]
+    end
   end
 end

@@ -6,7 +6,6 @@ ENV['RACK_ENV'] = 'test'
 
 module Brochure
   class TestApplication < Application
-    def warn(*) end
   end
 end
 
