@@ -15,10 +15,13 @@ module Brochure
       app
     end
 
+    attr_reader :app_root, :helper_root, :template_root, :asset_root
+
     def initialize(root)
       @app_root      = File.expand_path(root)
       @helper_root   = File.join(@app_root, "app", "helpers")
       @template_root = File.join(@app_root, "app", "templates")
+      @asset_root    = File.join(@app_root, "public")
       @context_class = Context.for(helpers)
       @templates     = {}
     end
