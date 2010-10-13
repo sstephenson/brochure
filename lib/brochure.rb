@@ -1,12 +1,17 @@
-require "rack/request"
-require "rack/utils"
+require "rack"
 require "tilt"
 
 module Brochure
   class Application
     def self.new(*)
       app = super
-      app = Failsafe.new(app)
+
+      if ENV['RACK_ENV'] == 'development'
+        app = Rack::ShowExceptions.new(app)
+      else
+        app = Failsafe.new(app)
+      end
+
       app
     end
 
