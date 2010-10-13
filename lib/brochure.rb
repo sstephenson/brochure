@@ -64,7 +64,7 @@ module Brochure
         "Content-Type"   => content_type,
         "Content-Length" => body.length.to_s
       }
-      [status, headers, body]
+      [status, headers, [body]]
     end
 
     def success(body)
