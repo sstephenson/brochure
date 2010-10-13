@@ -35,15 +35,21 @@ module Brochure
     def call(env)
       if env["PATH_INFO"].include?("..")
         forbidden
-      elsif result = render(env, env["PATH_INFO"][/[^.]+/])
-        success result
+      elsif template = find_template(env["PATH_INFO"][/[^.]+/])
+        success render_template(template, env)
       else
         not_found
       end
     end
 
-    def find_template_path(logical_path, options = {})
-      if options[:partial]
+    def find_template(*args)
+      if template_path = find_template_path(*args)
+        template_for(template_path)
+      end
+    end
+
+    def find_template_path(logical_path, partial = false)
+      if partial
         path_parts   = logical_path.split("/")
         logical_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
       else
@@ -59,20 +65,17 @@ module Brochure
       File.exists?(template_path) && template_path
     end
 
-    def render(env, logical_path, options = {})
-      if template_path = find_template_path(logical_path, options)
-        context = @context_class.new(self, env)
-        locals  = options[:locals] || {}
-        template_for(template_path).render(context, locals)
-      end
-    end
-
     def template_for(template_path)
       if ENV['RACK_ENV'] == 'development'
         Tilt.new(template_path)
       else
         @templates[template_path] ||= Tilt.new(template_path)
       end
+    end
+
+    def render_template(template, env, locals = {})
+      context = @context_class.new(self, env)
+      template.render(context, locals)
     end
 
     def respond_with(status, body, content_type = "text/html, charset=utf-8")
@@ -121,8 +124,8 @@ module Brochure
     end
 
     def render(logical_path, locals = {})
-      if result = @application.render(env, logical_path, :partial => true, :locals => locals)
-        result
+      if template = @application.find_template(logical_path, true)
+        @application.render_template(template, env, locals)
       else
         raise TemplateNotFound, "no such template '#{logical_path}'"
       end
