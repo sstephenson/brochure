@@ -48,5 +48,6 @@ Requires [Tilt](http://github.com/rtomayko/tilt).
 # License
 
 Copyright (c) 2010 Sam Stephenson.
+Copyright (c) 2010 Josh Peek.
 
 Released under the MIT license. See `LICENSE` for details.
