@@ -71,7 +71,11 @@ module Brochure
     end
 
     def template_for(template_path)
-      @templates[template_path] ||= Tilt.new(template_path)
+      if ENV['RACK_ENV'] == 'development'
+        Tilt.new(template_path)
+      else
+        @templates[template_path] ||= Tilt.new(template_path)
+      end
     end
 
     def respond_with(status, body, content_type = "text/html, charset=utf-8")
