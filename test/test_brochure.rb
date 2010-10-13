@@ -53,6 +53,11 @@ class BrochureTest < Test::Unit::TestCase
     assert last_response.server_error?
   end
 
+  def test_403_is_returned_when_path_is_outside_root
+    get "/../passwd"
+    assert_equal 403, last_response.status
+  end
+
   def test_partials_can_be_rendered_from_templates
     get "/help"
     assert last_response.body["<title>Help</title>"]

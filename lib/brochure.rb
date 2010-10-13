@@ -20,8 +20,12 @@ module Brochure
     end
 
     def call(env)
-      logical_path = env["PATH_INFO"][/[^.]+/]
-      success render(logical_path)
+      if env["PATH_INFO"].include?("..")
+        forbidden
+      else
+        logical_path = env["PATH_INFO"][/[^.]+/]
+        success render(logical_path)
+      end
     rescue TemplateNotFound => e
       not_found
     rescue StandardError => e
@@ -77,6 +81,10 @@ module Brochure
         <html><head><title>Not Found</title></head>
         <body><h1>404 Not Found</h1></body></html>
       HTML
+    end
+
+    def forbidden
+      respond_with 403, "Forbidden"
     end
 
     def error(exception)
