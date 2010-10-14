@@ -54,7 +54,7 @@ module Brochure
     end
 
     def template_for(template_path)
-      if ENV['RACK_ENV'] == 'development'
+      if Brochure.development?
         Tilt.new(template_path)
       else
         @templates[template_path] ||= Tilt.new(template_path)

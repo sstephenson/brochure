@@ -9,7 +9,7 @@ module Brochure
 
   def self.app(root)
     app = Application.new(root)
-    if ENV["RACK_ENV"] == "development"
+    if development?
       app = Rack::ShowExceptions.new(app)
     else
       app = Failsafe.new(app)
@@ -19,5 +19,9 @@ module Brochure
 
   def self.camelize(string)
     string.gsub(/(^|_)(\w)/) { $2.upcase }
+  end
+
+  def self.development?
+    ENV["RACK_ENV"] == "development"
   end
 end
