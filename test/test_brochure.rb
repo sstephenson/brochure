@@ -4,16 +4,11 @@ require "test/unit"
 
 ENV['RACK_ENV'] = 'test'
 
-module Brochure
-  class TestApplication < Application
-  end
-end
-
 class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
-    Brochure::TestApplication.new File.dirname(__FILE__)
+    Brochure.app File.dirname(__FILE__)
   end
 
   def test_templates_are_rendered_when_present

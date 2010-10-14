@@ -2,19 +2,17 @@ require "rack"
 require "tilt"
 
 module Brochure
-  class Application
-    def self.new(*)
-      app = super
-
-      if ENV['RACK_ENV'] == 'development'
-        app = Rack::ShowExceptions.new(app)
-      else
-        app = Failsafe.new(app)
-      end
-
-      app
+  def self.app(root)
+    app = Application.new(root)
+    if ENV["RACK_ENV"] == "development"
+      app = Rack::ShowExceptions.new(app)
+    else
+      app = Failsafe.new(app)
     end
+    app
+  end
 
+  class Application
     attr_reader :app_root, :helper_root, :template_root, :asset_root
 
     def initialize(root)

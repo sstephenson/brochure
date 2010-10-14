@@ -1,2 +1,2 @@
 require "brochure"
-run Brochure::Application.new(File.dirname(__FILE__))
+run Brochure.app(File.dirname(__FILE__))

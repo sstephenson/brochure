@@ -24,7 +24,7 @@ Sample application structure:
 Sample `config.ru`:
 
     require "brochure"
-    run Brochure::Application.new(File.dirname(__FILE__))
+    run Brochure.app(File.dirname(__FILE__))
 
 URLs are automatically mapped to template names. So `/` will render
 `app/templates/index.html.erb`, `/signup` will render
