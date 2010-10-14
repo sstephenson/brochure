@@ -21,7 +21,7 @@ module Brochure
     end
 
     def call(env)
-      if env["PATH_INFO"].include?("..")
+      if forbidden?(env["PATH_INFO"])
         forbidden
       elsif template = find_template(env["PATH_INFO"][/[^.]+/])
         success render_template(template, env)
@@ -30,20 +30,23 @@ module Brochure
       end
     end
 
-    def find_template(*args)
-      if template_path = find_template_path(*args)
+    def forbidden?(path)
+      path[".."] || File.basename(path)[/^_/]
+    end
+
+    def find_template(logical_path)
+      if template_path = find_template_path(logical_path)
         template_for(template_path)
       end
     end
 
-    def find_template_path(logical_path, partial = false)
-      if partial
-        path_parts   = logical_path.split("/")
-        logical_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
-      else
-        return false if File.basename(logical_path)[/^_/]
+    def find_partial(logical_path)
+      if template_path = find_partial_path(logical_path)
+        template_for(template_path)
       end
+    end
 
+    def find_template_path(logical_path)
       template_path = if File.directory?(File.join(@template_root, logical_path))
         File.join(@template_root, logical_path, "index.html.erb")
       else
@@ -51,6 +54,12 @@ module Brochure
       end
 
       File.exists?(template_path) && template_path
+    end
+
+    def find_partial_path(logical_path)
+      path_parts   = logical_path.split("/")
+      partial_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
+      find_template_path(partial_path)
     end
 
     def template_for(template_path)

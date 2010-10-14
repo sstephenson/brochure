@@ -31,7 +31,7 @@ class BrochureTest < Test::Unit::TestCase
 
   def test_partials_are_not_publicly_accessible
     get "/shared/_head"
-    assert last_response.not_found?
+    assert last_response.forbidden?
   end
 
   def test_404_is_returned_when_a_template_is_not_present
