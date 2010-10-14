@@ -46,13 +46,16 @@ module Brochure
       end
     end
 
-    def find_template_path(logical_path)
-      template_path = if File.directory?(File.join(@template_root, logical_path))
+    def expand_logical_path(logical_path)
+      if File.directory?(File.join(@template_root, logical_path))
         File.join(@template_root, logical_path, "index.html.erb")
       else
         File.join(@template_root, logical_path + ".html.erb")
       end
+    end
 
+    def find_template_path(logical_path)
+      template_path = expand_logical_path(logical_path)
       File.exists?(template_path) && template_path
     end
 
