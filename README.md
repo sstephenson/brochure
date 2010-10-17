@@ -43,11 +43,12 @@ render `app/templates/shared/_header.html.erb` inline.
 
     $ gem install brochure
 
-Requires [Tilt](http://github.com/rtomayko/tilt).
+Requires [Hike](http://github.com/sstephenson/hike),
+[Rack](http://rack.rubyforge.org/), and
+[Tilt](http://github.com/rtomayko/tilt).
 
 # License
 
-Copyright (c) 2010 Sam Stephenson.
-Copyright (c) 2010 Josh Peek.
+Copyright (c) 2010 Sam Stephenson and Josh Peek.
 
 Released under the MIT license. See `LICENSE` for details.
