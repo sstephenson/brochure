@@ -3,6 +3,8 @@ require "rack"
 require "tilt"
 
 module Brochure
+  VERSION = "0.2.0"
+
   autoload :Application,      "brochure/application"
   autoload :Context,          "brochure/context"
   autoload :Failsafe,         "brochure/failsafe"
