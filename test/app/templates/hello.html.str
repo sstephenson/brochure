@@ -1,0 +1,1 @@
+<p>Hello #{request.params["name"]}</p>

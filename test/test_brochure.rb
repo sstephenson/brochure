@@ -73,4 +73,9 @@ class BrochureTest < Test::Unit::TestCase
     get "/help/partial_error"
     assert last_response.server_error?
   end
+
+  def test_using_other_tilt_template_types
+    get "/hello?name=Sam"
+    assert last_response.body["<p>Hello Sam</p>"]
+  end
 end
