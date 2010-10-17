@@ -1,3 +1,4 @@
+require "hike"
 require "rack"
 require "tilt"
 

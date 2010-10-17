@@ -7,10 +7,13 @@ spec = Gem::Specification.new do |s|
   s.homepage     = "http://github.com/sstephenson/brochure"
   s.summary      = "Rack + ERB static sites"
   s.description  = "A Rack application for serving static sites with ERB templates."
-  s.files        = ["lib/brochure.rb", "README.md", "LICENSE"]
+  s.files        = Dir["lib/**/*.rb", "README.md", "LICENSE"]
   s.require_path = "lib"
 
-  s.add_dependency "tilt"
+  s.add_dependency "hike", ">= 0.1.1"
+  s.add_dependency "rack", ">= 1.0.0"
+  s.add_dependency "tilt", ">= 1.1.0"
+
   s.add_development_dependency "rack-test"
 end
 

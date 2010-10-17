@@ -3,12 +3,17 @@ module Brochure
     attr_reader :app_root, :helper_root, :template_root, :asset_root
 
     def initialize(root)
-      @app_root      = File.expand_path(root)
-      @helper_root   = File.join(@app_root, "app", "helpers")
-      @template_root = File.join(@app_root, "app", "templates")
-      @asset_root    = File.join(@app_root, "public")
-      @context_class = Context.for(helpers)
-      @templates     = {}
+      @app_root       = File.expand_path(root)
+      @helper_root    = File.join(@app_root, "app", "helpers")
+      @template_root  = File.join(@app_root, "app", "templates")
+      @asset_root     = File.join(@app_root, "public")
+
+      @template_trail = Hike::Trail.new(@app_root)
+      @template_trail.extensions.replace(Tilt.mappings.keys.sort)
+      @template_trail.paths.push(@template_root)
+
+      @context_class  = Context.for(helpers)
+      @templates      = {}
     end
 
     def helpers
@@ -46,23 +51,15 @@ module Brochure
       end
     end
 
-    def expand_logical_path(logical_path)
-      if File.directory?(File.join(@template_root, logical_path))
-        File.join(@template_root, logical_path, "index.html.erb")
-      else
-        File.join(@template_root, logical_path + ".html.erb")
-      end
-    end
-
     def find_template_path(logical_path)
-      template_path = expand_logical_path(logical_path)
-      File.exists?(template_path) && template_path
+      candidates = [logical_path + ".html", logical_path + "/index.html"]
+      @template_trail.find(*candidates)
     end
 
     def find_partial_path(logical_path)
       path_parts   = logical_path.split("/")
       partial_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
-      find_template_path(partial_path)
+      @template_trail.find(partial_path + ".html")
     end
 
     def template_for(template_path)
