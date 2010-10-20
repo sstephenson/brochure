@@ -8,7 +8,7 @@ class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
-    require File.dirname(__FILE__) + "/fixtures/helpers/link_helper"
+    require File.expand_path("../fixtures/helpers/link_helper", __FILE__)
     Brochure.app File.dirname(__FILE__) + "/fixtures", :helpers => [LinkHelper]
   end
 
