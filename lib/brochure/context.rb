@@ -19,6 +19,10 @@ module Brochure
       @_request ||= Rack::Request.new(env)
     end
 
+    def h(html)
+      Rack::Utils.escape_html(html)
+    end
+
     def render(logical_path, locals = {})
       if template = @application.find_partial(logical_path)
         @application.render_template(template, env, locals)
