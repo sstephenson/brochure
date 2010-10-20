@@ -8,8 +8,8 @@ class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app
-    require File.dirname(__FILE__) + "/app/helpers/link_helper"
-    Brochure.app File.dirname(__FILE__), :helpers => [LinkHelper]
+    require File.dirname(__FILE__) + "/fixtures/helpers/link_helper"
+    Brochure.app File.dirname(__FILE__) + "/fixtures", :helpers => [LinkHelper]
   end
 
   def test_templates_are_rendered_when_present

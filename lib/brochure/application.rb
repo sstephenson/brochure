@@ -4,7 +4,7 @@ module Brochure
 
     def initialize(root, options = {})
       @app_root      = File.expand_path(root)
-      @template_root = File.join(@app_root, "app", "templates")
+      @template_root = File.join(@app_root, "templates")
       @asset_root    = File.join(@app_root, "public")
 
       helpers.push(*options[:helpers]) if options[:helpers]
