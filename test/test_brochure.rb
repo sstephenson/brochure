@@ -4,12 +4,13 @@ require "test/unit"
 
 ENV['RACK_ENV'] = 'test'
 
+require File.expand_path("../fixtures/default/helpers/link_helper", __FILE__)
+
 class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
-  def app
-    require File.expand_path("../fixtures/helpers/link_helper", __FILE__)
-    Brochure.app File.dirname(__FILE__) + "/fixtures", :helpers => [LinkHelper]
+  def app(name = :default)
+    @app ||= Brochure.app File.dirname(__FILE__) + "/fixtures/#{name}", :helpers => [LinkHelper]
   end
 
   def test_templates_are_rendered_when_present
@@ -38,11 +39,20 @@ class BrochureTest < Test::Unit::TestCase
   def test_404_is_returned_when_a_template_is_not_present
     get "/nonexistent"
     assert last_response.not_found?
+    assert_match %r{<h1>404 Not Found</h1>}, last_response.body
   end
 
   def test_404_is_returned_for_a_directory_when_an_index_template_is_not_present
     get "/shared"
     assert last_response.not_found?
+  end
+
+  def test_custom_404_is_returned_when_a_404_html_template_is_not_present
+    app :custom404
+
+    get "/nonexistent"
+    assert last_response.not_found?
+    assert_match %r{<h1>Oops, that isn't right.</h1>}, last_response.body
   end
 
   def test_500_is_returned_when_a_template_raises_an_exception

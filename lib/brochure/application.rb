@@ -35,7 +35,7 @@ module Brochure
       elsif template = find_template(env["PATH_INFO"][/[^.]+/])
         success render_template(template, env)
       else
-        not_found
+        not_found(env)
       end
     end
 
@@ -91,7 +91,15 @@ module Brochure
       respond_with 200, body
     end
 
-    def not_found
+    def not_found(env)
+      if template = find_template("404")
+        respond_with 404, render_template(template, env)
+      else
+        default_not_found
+      end
+    end
+
+    def default_not_found
       respond_with 404, <<-HTML
         <!DOCTYPE html>
         <html><head><title>Not Found</title></head>
