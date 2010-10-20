@@ -3,17 +3,25 @@ module Brochure
     attr_reader :app_root, :helper_root, :template_root, :asset_root
 
     def initialize(root)
-      @app_root       = File.expand_path(root)
-      @helper_root    = File.join(@app_root, "app", "helpers")
-      @template_root  = File.join(@app_root, "app", "templates")
-      @asset_root     = File.join(@app_root, "public")
+      @app_root      = File.expand_path(root)
+      @helper_root   = File.join(@app_root, "app", "helpers")
+      @template_root = File.join(@app_root, "app", "templates")
+      @asset_root    = File.join(@app_root, "public")
+    end
 
-      @template_trail = Hike::Trail.new(@app_root)
-      @template_trail.extensions.replace(Tilt.mappings.keys.sort)
-      @template_trail.paths.push(@template_root)
+    def template_trail
+      @template_trail ||= Hike::Trail.new(app_root).tap do |trail|
+        trail.extensions.replace(Tilt.mappings.keys.sort)
+        trail.paths.push(template_root)
+      end
+    end
 
-      @context_class  = Context.for(helpers)
-      @templates      = {}
+    def context_class
+      @context_class ||= Context.for(helpers)
+    end
+
+    def templates
+      @templates ||= {}
     end
 
     def helpers
@@ -53,25 +61,25 @@ module Brochure
 
     def find_template_path(logical_path)
       candidates = [logical_path + ".html", logical_path + "/index.html"]
-      @template_trail.find(*candidates)
+      template_trail.find(*candidates)
     end
 
     def find_partial_path(logical_path)
       path_parts   = logical_path.split("/")
       partial_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
-      @template_trail.find(partial_path + ".html")
+      template_trail.find(partial_path + ".html")
     end
 
     def template_for(template_path)
       if Brochure.development?
         Tilt.new(template_path)
       else
-        @templates[template_path] ||= Tilt.new(template_path)
+        templates[template_path] ||= Tilt.new(template_path)
       end
     end
 
     def render_template(template, env, locals = {})
-      context = @context_class.new(self, env)
+      context = context_class.new(self, env)
       template.render(context, locals)
     end
 
