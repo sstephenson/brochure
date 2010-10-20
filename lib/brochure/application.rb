@@ -1,13 +1,21 @@
 module Brochure
   class Application
-    attr_reader :app_root, :template_root, :asset_root
+    attr_reader :app_root, :template_root, :asset_root, :plugin_root
 
     def initialize(root, options = {})
       @app_root      = File.expand_path(root)
       @template_root = File.join(@app_root, "templates")
       @asset_root    = File.join(@app_root, "public")
+      @plugin_root   = File.join(@app_root, "vendor", "plugins")
 
       helpers.push(*options[:helpers]) if options[:helpers]
+      initialize_plugins
+    end
+
+    def initialize_plugins
+      plugins.each do |plugin_root|
+        template_trail.paths.push(File.join(plugin_root, "templates"))
+      end
     end
 
     def template_trail
@@ -27,6 +35,12 @@ module Brochure
 
     def helpers
       @helpers ||= []
+    end
+
+    def plugins
+      @plugins ||= Dir[File.join(plugin_root, "*")].select do |entry|
+        File.directory?(entry)
+      end
     end
 
     def call(env)
