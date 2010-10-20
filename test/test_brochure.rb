@@ -89,4 +89,14 @@ class BrochureTest < Test::Unit::TestCase
     get "/hello?name=Sam"
     assert last_response.body["<p>Hello Sam</p>"]
   end
+
+  def test_templates_in_plugins
+    get "/common"
+    assert last_response.body["Common template"]
+  end
+
+  def test_rendering_partials_in_plugins
+    get "/help"
+    assert last_response.body["<div>Footer</div>"]
+  end
 end
