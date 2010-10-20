@@ -10,18 +10,14 @@ module Brochure
   autoload :Failsafe,         "brochure/failsafe"
   autoload :TemplateNotFound, "brochure/errors"
 
-  def self.app(root)
-    app = Application.new(root)
+  def self.app(root, options = {})
+    app = Application.new(root, options)
     if development?
       app = Rack::ShowExceptions.new(app)
     else
       app = Failsafe.new(app)
     end
     app
-  end
-
-  def self.camelize(string)
-    string.gsub(/(^|_)(\w)/) { $2.upcase }
   end
 
   def self.development?

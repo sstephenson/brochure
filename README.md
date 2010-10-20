@@ -6,9 +6,6 @@ A Rack application for serving static sites with ERB templates.
 Sample application structure:
 
     app/
-      helpers/
-        analytics_helper.rb
-        formatting_helper.rb
       templates/
         help/
           index.html.erb
@@ -30,10 +27,6 @@ URLs are automatically mapped to template names. So `/` will render
 `app/templates/index.html.erb`, `/signup` will render
 `app/templates/signup.html.erb`, `/help/` will render
 `app/templates/help/index.html.erb`, and so on.
-
-Helpers should define a module that maps to their filename. So
-`analytics_helper.rb` defines `AnalyticsHelper`,
-`html/forms_helper.rb` defines `Html::FormsHelper`, and so on.
 
 Templates can render partials. Partials are denoted by a leading
 underscore in their filename. So `<%= render "shared/header" %>` will

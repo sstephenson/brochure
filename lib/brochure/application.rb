@@ -1,12 +1,13 @@
 module Brochure
   class Application
-    attr_reader :app_root, :helper_root, :template_root, :asset_root
+    attr_reader :app_root, :template_root, :asset_root
 
-    def initialize(root)
+    def initialize(root, options = {})
       @app_root      = File.expand_path(root)
-      @helper_root   = File.join(@app_root, "app", "helpers")
       @template_root = File.join(@app_root, "app", "templates")
       @asset_root    = File.join(@app_root, "public")
+
+      helpers.push(*options[:helpers]) if options[:helpers]
     end
 
     def template_trail
@@ -25,12 +26,7 @@ module Brochure
     end
 
     def helpers
-      @helpers ||= Dir[File.join(@helper_root, "**", "*.rb")].map do |helper_path|
-        base_name    = helper_path[(@helper_root.length + 1)..-1][/(.*?)\.rb$/, 1]
-        module_names = base_name.split("/").map { |n| Brochure.camelize(n) }
-        load helper_path
-        module_names.inject(Kernel) { |mod, name| mod.const_get(name) }
-      end
+      @helpers ||= []
     end
 
     def call(env)
