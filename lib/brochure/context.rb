@@ -10,9 +10,16 @@ module Brochure
 
     attr_accessor :application, :env
 
-    def initialize(application, env)
+    def initialize(application, env, assigns = {})
       self.application = application
       self.env = env
+      load_assigns(assigns)
+    end
+
+    def load_assigns(assigns)
+      assigns.each do |name, value|
+        instance_variable_set("@#{name}", value)
+      end
     end
 
     def request

@@ -10,7 +10,11 @@ class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app(name = :default)
-    @app ||= Brochure.app File.dirname(__FILE__) + "/fixtures/#{name}", :helpers => [LinkHelper]
+    @app ||= Brochure.app(
+      File.dirname(__FILE__) + "/fixtures/#{name}",
+      :helpers => [LinkHelper],
+      :assigns => { :domain => "37signals.com" }
+    )
   end
 
   def test_templates_are_rendered_when_present
@@ -52,7 +56,7 @@ class BrochureTest < Test::Unit::TestCase
 
     get "/nonexistent"
     assert last_response.not_found?
-    assert_match %r{<h1>Oops, that isn't right.</h1>}, last_response.body
+    assert_match %r{<h1>Oops, that isn't right.</h1>}, last_response.body #'
   end
 
   def test_500_is_returned_when_a_template_raises_an_exception
@@ -98,5 +102,10 @@ class BrochureTest < Test::Unit::TestCase
   def test_rendering_partials_in_plugins
     get "/help"
     assert last_response.body["<div>Footer</div>"]
+  end
+
+  def test_assigns_are_available_in_templates
+    get "/hello"
+    assert last_response.body['<a href="http://37signals.com/">Home</a>']
   end
 end

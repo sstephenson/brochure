@@ -1,6 +1,6 @@
 module Brochure
   class Application
-    attr_reader :app_root, :template_root, :asset_root, :plugin_root
+    attr_reader :app_root, :template_root, :asset_root, :plugin_root, :assigns
 
     def initialize(root, options = {})
       @app_root      = File.expand_path(root)
@@ -8,6 +8,7 @@ module Brochure
       @asset_root    = File.join(@app_root, "public")
       @plugin_root   = File.join(@app_root, "vendor", "plugins")
 
+      @assigns = options[:assigns] || {}
       helpers.push(*options[:helpers]) if options[:helpers]
       initialize_plugins
     end
@@ -89,7 +90,7 @@ module Brochure
     end
 
     def render_template(template, env, locals = {})
-      context = context_class.new(self, env)
+      context = context_class.new(self, env, assigns)
       template.render(context, locals)
     end
 

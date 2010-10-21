@@ -1,1 +1,2 @@
 <p>Hello #{request.params["name"]}</p>
+<a href="http://#@domain/">Home</a>
