@@ -94,7 +94,7 @@ module Brochure
       template.render(context, locals)
     end
 
-    def respond_with(status, body, content_type = "text/html, charset=utf-8")
+    def respond_with(status, body, content_type = "text/html; charset=utf-8")
       headers = {
         "Content-Type"   => content_type,
         "Content-Length" => body.length.to_s
