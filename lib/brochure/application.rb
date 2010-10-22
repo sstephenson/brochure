@@ -97,7 +97,7 @@ module Brochure
     def respond_with(status, body, content_type = "text/html; charset=utf-8")
       headers = {
         "Content-Type"   => content_type,
-        "Content-Length" => body.length.to_s
+        "Content-Length" => Rack::Utils.bytesize(body).to_s
       }
       [status, headers, [body]]
     end
