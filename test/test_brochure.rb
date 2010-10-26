@@ -40,6 +40,11 @@ class BrochureTest < Test::Unit::TestCase
     assert last_response.forbidden?
   end
 
+  def test_static_asset
+    get "/screen.css"
+    assert last_response.ok?
+  end
+
   def test_404_is_returned_when_a_template_is_not_present
     get "/nonexistent"
     assert last_response.not_found?
