@@ -27,5 +27,10 @@ module Brochure
       ext = File.extname(File.basename(path, engine_extension))
       ext.empty? ? ".html" : ext
     end
+
+    def content_type
+      type = Rack::Mime.mime_type(format_extension)
+      type[/^text/] ? "#{type}; charset=utf-8" : type
+    end
   end
 end

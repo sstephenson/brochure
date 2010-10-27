@@ -21,6 +21,7 @@ class BrochureTest < Test::Unit::TestCase
     get "/signup"
     assert last_response.ok?
     assert_equal "<h1>Sign up</h1>", last_response.body.strip
+    assert_equal "text/html; charset=utf-8", last_response.content_type
   end
 
   def test_index_templates_are_rendered_for_directories
@@ -112,5 +113,11 @@ class BrochureTest < Test::Unit::TestCase
   def test_assigns_are_available_in_templates
     get "/hello"
     assert last_response.body['<a href="http://37signals.com/">Home</a>']
+  end
+
+  def test_alternate_template_format
+    get "/hello.js"
+    assert last_response.body['var domain = "37signals.com";']
+    assert_equal "application/javascript", last_response.content_type
   end
 end

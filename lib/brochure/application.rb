@@ -47,8 +47,8 @@ module Brochure
     def call(env)
       if forbidden?(env["PATH_INFO"])
         forbidden
-      elsif template = find_template(env["PATH_INFO"][/[^.]+/])
-        success render_template(template, env)
+      elsif template = find_template(env["PATH_INFO"])
+        success render_template(template, env), template.content_type
       else
         not_found(env)
       end
@@ -58,27 +58,26 @@ module Brochure
       path[".."] || File.basename(path)[/^_/]
     end
 
-    def find_template(logical_path)
-      if template_path = find_template_path(logical_path)
+    def find_template(logical_path, format_extension = ".html")
+      if template_path = find_template_path(logical_path, format_extension)
         template_for(template_path)
       end
     end
 
-    def find_partial(logical_path, format_extension)
+    def find_partial(logical_path, format_extension = ".html")
       if template_path = find_partial_path(logical_path, format_extension)
         template_for(template_path)
       end
     end
 
-    def find_template_path(logical_path)
-      candidates = [logical_path + ".html", logical_path + "/index.html"]
-      template_trail.find(*candidates)
+    def find_template_path(logical_path, format_extension)
+      template_trail.find(logical_path, logical_path + format_extension, logical_path + "/index" + format_extension)
     end
 
     def find_partial_path(logical_path, format_extension)
       dirname, basename = File.split(logical_path)
-      partial_path = File.join(dirname, "_" + basename + format_extension)
-      template_trail.find(partial_path)
+      partial_path = File.join(dirname, "_" + basename)
+      template_trail.find(partial_path, partial_path + format_extension)
     end
 
     def template_for(template_path)
@@ -101,8 +100,8 @@ module Brochure
       [status, headers, [body]]
     end
 
-    def success(body)
-      respond_with 200, body
+    def success(body, content_type)
+      respond_with 200, body, content_type
     end
 
     def not_found(env)
