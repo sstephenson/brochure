@@ -82,16 +82,15 @@ module Brochure
     end
 
     def template_for(template_path)
-      if Brochure.development?
-        Tilt.new(template_path)
-      else
-        templates[template_path] ||= Tilt.new(template_path)
-      end
+      templates[template_path] ||= Template.new(self, template_path)
+    end
+
+    def context_for(env)
+      context_class.new(self, env, assigns)
     end
 
     def render_template(template, env, locals = {})
-      context = context_class.new(self, env, assigns)
-      template.render(context, locals)
+      template.render(env, locals)
     end
 
     def respond_with(status, body, content_type = "text/html; charset=utf-8")

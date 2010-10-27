@@ -8,11 +8,11 @@ module Brochure
       context
     end
 
-    attr_accessor :application, :env
+    attr_reader :application, :env
 
     def initialize(application, env, assigns = {})
-      self.application = application
-      self.env = env
+      @application = application
+      @env = env
       load_assigns(assigns)
     end
 
@@ -23,7 +23,7 @@ module Brochure
     end
 
     def request
-      @_request ||= Rack::Request.new(env)
+      @request ||= Rack::Request.new(env)
     end
 
     def h(html)
@@ -31,8 +31,8 @@ module Brochure
     end
 
     def render(logical_path, locals = {})
-      if template = @application.find_partial(logical_path)
-        @application.render_template(template, env, locals)
+      if template = application.find_partial(logical_path)
+        application.render_template(template, env, locals)
       else
         raise TemplateNotFound, "no such template '#{logical_path}'"
       end

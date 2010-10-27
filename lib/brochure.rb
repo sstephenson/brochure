@@ -9,6 +9,7 @@ module Brochure
   autoload :Context,          "brochure/context"
   autoload :Failsafe,         "brochure/failsafe"
   autoload :Static,           "brochure/static"
+  autoload :Template,         "brochure/template"
   autoload :TemplateNotFound, "brochure/errors"
 
   def self.app(root, options = {})
