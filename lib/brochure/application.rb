@@ -85,8 +85,8 @@ module Brochure
       templates[template_path] ||= Template.new(self, template_path)
     end
 
-    def context_for(env)
-      context_class.new(self, env, assigns)
+    def context_for(template, env)
+      context_class.new(self, template, env, assigns)
     end
 
     def render_template(template, env, locals = {})

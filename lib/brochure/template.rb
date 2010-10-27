@@ -16,7 +16,7 @@ module Brochure
     end
 
     def render(env, locals = {})
-      template.render(app.context_for(env), locals)
+      template.render(app.context_for(self, env), locals)
     end
   end
 end

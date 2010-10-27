@@ -8,11 +8,13 @@ module Brochure
       context
     end
 
-    attr_reader :application, :env
+    attr_reader :application, :template, :env
 
-    def initialize(application, env, assigns = {})
+    def initialize(application, template, env, assigns = {})
       @application = application
+      @template = template
       @env = env
+
       load_assigns(assigns)
     end
 
