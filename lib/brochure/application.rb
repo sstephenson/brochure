@@ -81,7 +81,11 @@ module Brochure
     end
 
     def template_for(template_path)
-      templates[template_path] ||= Template.new(self, template_path)
+      if Brochure.development?
+        Template.new(self, template_path)
+      else
+        templates[template_path] ||= Template.new(self, template_path)
+      end
     end
 
     def context_for(template, env)

@@ -8,11 +8,7 @@ module Brochure
     end
 
     def template
-      if Brochure.development?
-        Tilt.new(path)
-      else
-        @template ||= Tilt.new(path)
-      end
+      @template ||= Tilt.new(path)
     end
 
     def render(env, locals = {})
