@@ -48,7 +48,7 @@ module Brochure
       if forbidden?(env["PATH_INFO"])
         forbidden
       elsif template = find_template(env["PATH_INFO"])
-        success render_template(template, env), template.content_type
+        success template.render(env), template.content_type
       else
         not_found(env)
       end
@@ -88,10 +88,6 @@ module Brochure
       context_class.new(self, template, env, assigns)
     end
 
-    def render_template(template, env, locals = {})
-      template.render(env, locals)
-    end
-
     def respond_with(status, body, content_type = "text/html; charset=utf-8")
       headers = {
         "Content-Type"   => content_type,
@@ -106,7 +102,7 @@ module Brochure
 
     def not_found(env)
       if template = find_template("404")
-        respond_with 404, render_template(template, env)
+        respond_with 404, template.render(env)
       else
         default_not_found
       end
