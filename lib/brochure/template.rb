@@ -11,22 +11,26 @@ module Brochure
       @template ||= Tilt.new(path)
     end
 
-    def render(env, locals = {})
-      template.render(app.context_for(self, env), locals)
-    end
-
     def engine_extension
-      File.extname(path)
+      @engine_extension ||= File.extname(path)
     end
 
     def format_extension
-      ext = File.extname(File.basename(path, engine_extension))
-      ext.empty? ? ".html" : ext
+      @format_extension ||= begin
+        ext = File.extname(File.basename(path, engine_extension))
+        ext.empty? ? ".html" : ext
+      end
     end
 
     def content_type
-      type = Rack::Mime.mime_type(format_extension)
-      type[/^text/] ? "#{type}; charset=utf-8" : type
+      @content_type ||= begin
+        type = Rack::Mime.mime_type(format_extension)
+        type[/^text/] ? "#{type}; charset=utf-8" : type
+      end
+    end
+
+    def render(env, locals = {})
+      template.render(app.context_for(self, env), locals)
     end
   end
 end
