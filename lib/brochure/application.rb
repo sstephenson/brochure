@@ -64,8 +64,8 @@ module Brochure
       end
     end
 
-    def find_partial(logical_path)
-      if template_path = find_partial_path(logical_path)
+    def find_partial(logical_path, format_extension)
+      if template_path = find_partial_path(logical_path, format_extension)
         template_for(template_path)
       end
     end
@@ -75,10 +75,10 @@ module Brochure
       template_trail.find(*candidates)
     end
 
-    def find_partial_path(logical_path)
-      path_parts   = logical_path.split("/")
-      partial_path = (path_parts[0..-2] + ["_" + path_parts[-1]]).join("/")
-      template_trail.find(partial_path + ".html")
+    def find_partial_path(logical_path, format_extension)
+      dirname, basename = File.split(logical_path)
+      partial_path = File.join(dirname, "_" + basename + format_extension)
+      template_trail.find(partial_path)
     end
 
     def template_for(template_path)

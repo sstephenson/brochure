@@ -18,5 +18,14 @@ module Brochure
     def render(env, locals = {})
       template.render(app.context_for(self, env), locals)
     end
+
+    def engine_extension
+      File.extname(path)
+    end
+
+    def format_extension
+      ext = File.extname(File.basename(path, engine_extension))
+      ext.empty? ? ".html" : ext
+    end
   end
 end

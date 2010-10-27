@@ -33,8 +33,8 @@ module Brochure
     end
 
     def render(logical_path, locals = {})
-      if template = application.find_partial(logical_path)
-        application.render_template(template, env, locals)
+      if partial = application.find_partial(logical_path, template.format_extension)
+        application.render_template(partial, env, locals)
       else
         raise TemplateNotFound, "no such template '#{logical_path}'"
       end
