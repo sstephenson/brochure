@@ -95,6 +95,17 @@ class BrochureTest < Test::Unit::TestCase
     assert last_response.server_error?
   end
 
+  def test_render_layout_with_block
+    get "/blog"
+    puts last_response.body
+    assert last_response.body["<title>Blog</title>"]
+    assert last_response.body["<h1>Latest</h1>"]
+
+    get "/blog/2010"
+    assert last_response.body["<title>Blog - 2010</title>"]
+    assert last_response.body["<h1>Posts from 2010</h1>"]
+  end
+
   def test_using_other_tilt_template_types
     get "/hello?name=Sam"
     assert last_response.body["<p>Hello Sam</p>"]

@@ -32,9 +32,9 @@ module Brochure
       Rack::Utils.escape_html(html)
     end
 
-    def render(logical_path, locals = {})
+    def render(logical_path, locals = {}, &block)
       if partial = application.find_partial(logical_path, template.format_extension)
-        partial.render(env, locals)
+        partial.render(env, locals, &block)
       else
         raise TemplateNotFound, "no such template '#{logical_path}'"
       end
