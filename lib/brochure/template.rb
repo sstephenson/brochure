@@ -8,7 +8,7 @@ module Brochure
     end
 
     def template
-      @template ||= Tilt.new(path)
+      @template ||= Tilt.new(path, nil, :outvar => '@_out_buf')
     end
 
     def engine_extension

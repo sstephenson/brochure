@@ -34,10 +34,27 @@ module Brochure
 
     def render(logical_path, locals = {}, &block)
       if partial = application.find_partial(logical_path, template.format_extension)
-        partial.render(env, locals, &block)
+        if block_given?
+          print partial.render(env, locals) { capture(&block) }
+        else
+          partial.render(env, locals)
+        end
       else
         raise TemplateNotFound, "no such template '#{logical_path}'"
       end
+    end
+
+    def print(str)
+      @_out_buf << str
+    end
+
+    def capture
+      buf = ""
+      old_buf, @_out_buf = @_out_buf, buf
+      yield
+      buf
+    ensure
+      @_out_buf = old_buf
     end
   end
 end

@@ -97,7 +97,6 @@ class BrochureTest < Test::Unit::TestCase
 
   def test_render_layout_with_block
     get "/blog"
-    puts last_response.body
     assert last_response.body["<title>Blog</title>"]
     assert last_response.body["<h1>Latest</h1>"]
 
