@@ -1,5 +1,5 @@
-Brochure
-========
+<img src="https://github.com/downloads/sstephenson/brochure/logo.png"
+width="250" height="135" alt="Brochure">
 
 Brochure is a Rack application for serving static sites with ERB
 templates (or any of the many [template languages supported by
