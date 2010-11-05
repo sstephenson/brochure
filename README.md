@@ -29,7 +29,7 @@ Sample `config.ru`:
     run Brochure.app(root)
 
 
-## URL mapping and template rendering
+## Automatic URL mapping
 
 URLs are automatically mapped to template names:
 
@@ -37,9 +37,16 @@ URLs are automatically mapped to template names:
 * `/signup` &rarr; `templates/signup.html.erb`
 * `/help/` &rarr; `templates/help/index.html.erb`
 
+
+## Partials and helpers
+
 Templates can render partials. A partial is denoted by a leading
 underscore in its filename. So `<%= render "shared/header" %>` will
 render `templates/shared/_header.html.erb` inline.
+
+Partials can `<%= yield %>` back to the templates that render
+them. You can use this technique to extract common header and footer
+markup into a single layout file, for example.
 
 Templates have access to the Rack environment via the `env` method and
 to the Brochure application via the `application`
