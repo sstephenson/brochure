@@ -10,7 +10,7 @@ spec = Gem::Specification.new do |s|
   s.files        = Dir["lib/**/*.rb", "README.md", "LICENSE"]
   s.require_path = "lib"
 
-  s.add_dependency "hike", ">= 0.1.1"
+  s.add_dependency "hike", ">= 0.1.4"
   s.add_dependency "rack", ">= 1.0.0"
   s.add_dependency "tilt", ">= 1.1.0"
 
