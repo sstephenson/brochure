@@ -35,7 +35,7 @@ module Brochure
     def render(logical_path, locals = {}, &block)
       if partial = application.find_partial(logical_path, template.format_extension)
         if block_given?
-          print partial.render(env, locals) { capture(&block) }
+          concat partial.render(env, locals) { capture(&block) }
         else
           partial.render(env, locals)
         end
@@ -44,17 +44,35 @@ module Brochure
       end
     end
 
-    def print(str)
-      @_out_buf << str
+    def engine_name
+      template.engine_extension[1..-1]
     end
 
-    def capture
-      buf = ""
-      old_buf, @_out_buf = @_out_buf, buf
-      yield
-      buf
-    ensure
-      @_out_buf = old_buf
+    def concat(str)
+      if respond_to?(method = "#{engine_name}_concat")
+        send(method, str)
+      elsif @_out_buf
+        @_out_buf << str
+      else
+        raise CaptureNotSupported, "no capture support for #{engine_name} templates"
+      end
+    end
+
+    def capture(&block)
+      if respond_to?(method = "capture_#{engine_name}")
+        send(method, &block)
+      elsif @_out_buf
+        begin
+          buf = ""
+          old_buf, @_out_buf = @_out_buf, buf
+          yield
+          buf
+        ensure
+          @_out_buf = old_buf
+        end
+      else
+        raise CaptureNotSupported, "no capture support for #{engine_name} templates"
+      end
     end
   end
 end

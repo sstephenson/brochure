@@ -5,12 +5,13 @@ require "tilt"
 module Brochure
   VERSION = "0.5.0"
 
-  autoload :Application,      "brochure/application"
-  autoload :Context,          "brochure/context"
-  autoload :Failsafe,         "brochure/failsafe"
-  autoload :Static,           "brochure/static"
-  autoload :Template,         "brochure/template"
-  autoload :TemplateNotFound, "brochure/errors"
+  autoload :Application,         "brochure/application"
+  autoload :CaptureNotSupported, "brochure/errors"
+  autoload :Context,             "brochure/context"
+  autoload :Failsafe,            "brochure/failsafe"
+  autoload :Static,              "brochure/static"
+  autoload :Template,            "brochure/template"
+  autoload :TemplateNotFound,    "brochure/errors"
 
   def self.app(root, options = {})
     app = Application.new(root, options)

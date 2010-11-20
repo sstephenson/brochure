@@ -1,3 +1,5 @@
 module Brochure
-  class TemplateNotFound < StandardError; end
+  class Error     < ::StandardError; end
+  class TemplateNotFound    < Error; end
+  class CaptureNotSupported < Error; end
 end

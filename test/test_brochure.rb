@@ -136,4 +136,10 @@ class BrochureTest < Test::Unit::TestCase
     assert last_response.ok?
     assert last_response.body["Engineless <%= template %>"]
   end
+
+  def test_haml_with_layout
+    get "/haml_with_layout"
+    assert last_response.body["<title>Blog</title>"]
+    assert last_response.body["<h1>Latest</h1>"]
+  end
 end
