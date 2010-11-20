@@ -1,7 +1,5 @@
 module Brochure
   class Context
-    include Tilt::CompileSite
-
     def self.for(helpers)
       context = Class.new(self)
       context.send(:include, *helpers) if helpers.any?
