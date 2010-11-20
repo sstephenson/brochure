@@ -8,18 +8,23 @@ module Brochure
     end
 
     def template
-      @template ||= Tilt.new(path, nil, :outvar => '@_out_buf')
+      @template ||= Tilt.new(path, nil, :outvar => '@_out_buf') if engine_extension
     end
 
-    def engine_extension
-      @engine_extension ||= File.extname(path)
+    def basename
+      @basename ||= File.basename(path)
+    end
+
+    def extensions
+      @extensions ||= basename.scan(/\.[^.]+/)
     end
 
     def format_extension
-      @format_extension ||= begin
-        ext = File.extname(File.basename(path, engine_extension))
-        ext.empty? ? ".html" : ext
-      end
+      extensions.first
+    end
+
+    def engine_extension
+      extensions[1]
     end
 
     def content_type
@@ -30,7 +35,11 @@ module Brochure
     end
 
     def render(env, locals = {}, &block)
-      template.render(app.context_for(self, env), locals, &block)
+      if template
+        template.render(app.context_for(self, env), locals, &block)
+      else
+        File.read(path)
+      end
     end
   end
 end

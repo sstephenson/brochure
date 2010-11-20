@@ -130,4 +130,10 @@ class BrochureTest < Test::Unit::TestCase
     assert last_response.body['var domain = "37signals.com";']
     assert_equal "application/javascript", last_response.content_type
   end
+
+  def test_engineless_templates
+    get "/engineless"
+    assert last_response.ok?
+    assert last_response.body["Engineless <%= template %>"]
+  end
 end
