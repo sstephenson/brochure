@@ -9,11 +9,12 @@ require File.expand_path("../fixtures/default/helpers/link_helper", __FILE__)
 class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
-  def app(name = :default)
+  def app(name = :default, options = {})
     @app ||= Brochure.app(
       File.dirname(__FILE__) + "/fixtures/#{name}",
       :helpers => [LinkHelper],
-      :assigns => { :domain => "37signals.com" }
+      :assigns => { :domain => "37signals.com" },
+      :template_options => options[:template_options]
     )
   end
 
@@ -141,5 +142,17 @@ class BrochureTest < Test::Unit::TestCase
     get "/haml_with_layout"
     assert last_response.body["<title>Blog</title>"]
     assert last_response.body["<h1>Latest</h1>"]
+  end
+
+  def test_haml_with_xhtml_format
+    app :default, :template_options => { ".haml" => { :format => :xhtml } }
+    get "/doctype"
+    assert last_response.body["<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"]
+  end
+
+  def test_haml_with_html5_format
+    app :default, :template_options => { ".haml" => { :format => :html5 } }
+    get "/doctype"
+    assert last_response.body["<!DOCTYPE html>\n"]
   end
 end
