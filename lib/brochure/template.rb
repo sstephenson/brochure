@@ -8,7 +8,10 @@ module Brochure
     end
 
     def template
-      @template ||= Tilt.new(path, nil, :outvar => '@_out_buf') if engine_extension
+      if engine_extension
+        options = app.template_options[engine_extension] || nil
+        @template ||= Tilt.new(path, options, :outvar => '@_out_buf')
+      end
     end
 
     def basename
