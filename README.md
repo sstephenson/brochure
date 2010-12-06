@@ -79,6 +79,18 @@ option:
     run Brochure.app(root, :assigns => { :domain => "37signals.com" })
 
 
+## Tilt template options
+
+You can specify global [Tilt template
+options](https://github.com/rtomayko/tilt/blob/master/TEMPLATES.md#readme)
+on a per-engine basis with `:template_options`:
+
+    run Brochure.app(root, :template_options => {
+      ".haml" => { :format => :html5 },
+      ".md"   => { :smart  => true }
+    })
+
+
 # Installation
 
     $ gem install brochure
