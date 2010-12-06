@@ -76,7 +76,11 @@ module Brochure
 
     def find_partial_path(logical_path, format_extension)
       dirname, basename = File.split(logical_path)
-      partial_path = File.join(dirname, "_" + basename)
+      if dirname == "."
+        partial_path = "_" + basename
+      else
+        partial_path = File.join(dirname, "_" + basename)
+      end
       template_trail.find(partial_path, partial_path + format_extension)
     end
 
