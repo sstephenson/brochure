@@ -10,12 +10,12 @@ class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
   def app(name = :default, options = {})
-    @app ||= Brochure.app(
-      File.dirname(__FILE__) + "/fixtures/#{name}",
+    options = {
       :helpers => [LinkHelper],
-      :assigns => { :domain => "37signals.com" },
-      :template_options => options[:template_options]
-    )
+      :assigns => { :domain => "37signals.com" }
+    }.merge options
+    name = File.dirname(__FILE__) + "/fixtures/#{name}"
+    @app ||= Brochure.app name, options
   end
 
   def test_templates_are_rendered_when_present
@@ -104,6 +104,12 @@ class BrochureTest < Test::Unit::TestCase
     get "/blog/2010"
     assert last_response.body["<title>Blog - 2010</title>"]
     assert last_response.body["<h1>Posts from 2010</h1>"]
+  end
+
+  def test_using_layout_option
+    app :default, :layout => 'layout'
+    get '/index'
+    assert last_response.body["<h1>Welcome to Zombocom</h1>"]
   end
 
   def test_using_other_tilt_template_types

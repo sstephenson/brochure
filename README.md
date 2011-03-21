@@ -56,6 +56,32 @@ environment is available via the `request` method.
 You can print HTML-escaped strings in your templates with the `h`
 helper.
 
+## Layouts
+
+There are three ways you can handle layouts with brochure. The
+most obvious is the traditional:
+
+    <%= render 'shared/header' %>
+    Content
+    <%= render 'shared/footer' %>
+
+Since partials can `<%= yield %>` back to the templates that render
+them you can also use:
+
+    <% render 'layout', :title => 'Products' do %>
+      Content
+    <% end %>
+
+This keeps your header and footer in the same file. It also lets you
+pass information to the layout which then appears as an local variable.
+
+Finally you can use the :layout option when setting up the site:
+
+    run Brochure.app(root, :layout => 'layout')
+
+The advantage to this method is that you don't need to specify the
+layout in every file. The downside is that you cannot communicate with
+the layout like the other two more explicit methods.
 
 ## Custom helper methods and instance variables
 
