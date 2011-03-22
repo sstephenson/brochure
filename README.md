@@ -71,7 +71,7 @@ traditional:
     <%= render 'shared/footer' %>
 
 The file shared/_header.html.erb would contain the top of your page.
-Note how the title in the header:
+Note the title in the header:
 
     <html>
       <head>
