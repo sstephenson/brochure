@@ -58,7 +58,7 @@ helper.
 
 ## Layouts
 
-There are two ways you can handle layouts with brochure. First is the
+There are three ways you can handle layouts with brochure. First is the
 traditional:
 
     <%= render 'shared/header', :title => 'Products' %>
@@ -110,6 +110,17 @@ yielding where the content is:
         <%= yield %>
       </body>
     </html>
+
+The final way to specify a layout is by using the :layout option when
+setting up the site:
+
+    run Brochure.app(root, :layout => 'layout')
+
+With this method you don't need to specify the layout in every file.
+It does come with a downside. There is currently no way to pass
+information to the layout like we did with the title in the example
+above. There is also no way to turn off this automatic layout. It
+is applied to every HTML response.
 
 ## Custom helper methods and instance variables
 
