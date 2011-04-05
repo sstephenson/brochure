@@ -76,7 +76,11 @@ module Brochure
     end
 
     def find_template_path(logical_path, format_extension)
-      template_trail.find(logical_path, logical_path + format_extension, File.join(logical_path, "index" + format_extension))
+      template_trail.find(
+        logical_path,
+        logical_path + format_extension,
+        File.join(logical_path, "index" + format_extension)
+      )
     end
 
     def find_partial_path(logical_path, format_extension)
