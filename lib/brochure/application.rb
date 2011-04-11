@@ -8,6 +8,7 @@ module Brochure
       @asset_root    = File.join(@app_root, "public")
       @plugin_root   = File.join(@app_root, "vendor", "plugins")
 
+      @layout = options[:layout]
       @assigns = options[:assigns] || {}
       @template_options = options[:template_options] || {}
       helpers.push(*options[:helpers]) if options[:helpers]
@@ -49,7 +50,10 @@ module Brochure
       if forbidden?(env["PATH_INFO"])
         forbidden
       elsif template = find_template(env["PATH_INFO"])
-        success template.render(env), template.content_type
+        rendered = template.render env
+        rendered = find_partial(@layout).render(env) {rendered} if
+          @layout && template.content_type =~ /html/i
+        success rendered, template.content_type
       else
         not_found(env)
       end
