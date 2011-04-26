@@ -107,14 +107,14 @@ class BrochureTest < Test::Unit::TestCase
   end
 
   def test_using_layout_option
-    app :default, :layout => 'layout'
+    app :default, :layout => '_layout'
     get '/index'
     assert last_response.body["<h1>Welcome to Zombocom</h1>"]
     assert last_response.body["<title></title>"]
   end
 
   def test_using_layout_option_with_non_html
-    app :default, :layout => 'layout'
+    app :default, :layout => '_layout'
     get '/hello.js'
     assert last_response.body['var domain = "37signals.com";']
   end

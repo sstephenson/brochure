@@ -51,7 +51,7 @@ module Brochure
         forbidden
       elsif template = find_template(env["PATH_INFO"])
         rendered = template.render env
-        rendered = find_partial(@layout).render(env) {rendered} if
+        rendered = find_template(@layout).render(env) {rendered} if
           @layout && template.content_type =~ /html/i
         success rendered, template.content_type
       else
