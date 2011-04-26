@@ -9,12 +9,13 @@ require File.expand_path("../fixtures/default/helpers/link_helper", __FILE__)
 class BrochureTest < Test::Unit::TestCase
   include Rack::Test::Methods
 
-  def app(name = :default, options = {})
+  def app(name = :default, options = {}, &blk)
     @app ||= Brochure.app(
       File.dirname(__FILE__) + "/fixtures/#{name}",
       :helpers => [LinkHelper],
       :assigns => { :domain => "37signals.com" },
-      :template_options => options[:template_options]
+      :template_options => options[:template_options],
+      &blk
     )
   end
 
@@ -109,6 +110,15 @@ class BrochureTest < Test::Unit::TestCase
   def test_using_other_tilt_template_types
     get "/hello?name=Sam"
     assert last_response.body["<p>Hello Sam</p>"]
+  end
+
+  def test_block_configured
+    app do |a|
+      path = '../custom404/templates'
+      a.template_trail.paths.push path
+    end
+    get '/404'
+    assert last_response.ok?
   end
 
   def test_templates_in_plugins
