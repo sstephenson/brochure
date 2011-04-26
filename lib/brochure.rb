@@ -15,6 +15,7 @@ module Brochure
 
   def self.app(root, options = {})
     app = Application.new(root, options)
+    yield app if block_given?
     app = Static.new(app, app.asset_root)
 
     if development?
