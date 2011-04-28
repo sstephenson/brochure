@@ -12,7 +12,7 @@ spec = Gem::Specification.new do |s|
 
   s.add_dependency "hike", "~> 1.0"
   s.add_dependency "rack", "~> 1.0"
-  s.add_dependency "tilt", ">= 1.1.0"
+  s.add_dependency "tilt", "~> 1.1"
 
   s.add_development_dependency "rack-test"
   s.add_development_dependency "haml"
