@@ -3,7 +3,7 @@ require "rack"
 require "tilt"
 
 module Brochure
-  VERSION = "0.5.3"
+  VERSION = "0.5.4"
 
   autoload :Application,         "brochure/application"
   autoload :CaptureNotSupported, "brochure/errors"
