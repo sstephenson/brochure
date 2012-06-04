@@ -4,7 +4,7 @@ module Brochure
 
     def initialize(root, options = {})
       @app_root      = File.expand_path(root)
-      @template_root = File.join(@app_root, "templates")
+      @template_root = File.join(@app_root, options[:templates_root] || "templates")
       @asset_root    = File.join(@app_root, "public")
       @plugin_root   = File.join(@app_root, "vendor", "plugins")
 
