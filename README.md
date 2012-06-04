@@ -56,6 +56,60 @@ environment is available via the `request` method.
 You can print HTML-escaped strings in your templates with the `h`
 helper.
 
+## Layouts
+
+There are two ways you can handle layouts with brochure. First is the
+traditional:
+
+    <%= render 'shared/header', :title => 'Products' %>
+    <p>Here is a list of my products:</p>
+    <ul>
+      <li>Product 1</li>
+      <li>Product 2</li>
+      ....
+    </ul>
+    <%= render 'shared/footer' %>
+
+The file shared/_header.html.erb would contain the top of your page.
+Note the title in the header:
+
+    <html>
+      <head>
+        <title><%= title %></title>
+      </head>
+      <body>
+        <img src="logo.png" alt="Site Logo">
+
+The file shared/_footer.html.erb would wrap things up:
+
+      </body>
+    </html>
+
+Splitting your layout in two files can get confusing sometimes to ensure
+proper opening and closing tags. Since partials can `<%= yield %>` back
+to the templates that render them an alternative is:
+
+    <% render 'layout', :title => 'Products' do %>
+      <p>Here is a list of my products:</p>
+      <ul>
+        <li>Product 1</li>
+        <li>Product 2</li>
+        ....
+      </ul>
+    <% end %>
+
+The file _layout.html.erb would then contain both the header and footer
+yielding where the content is:
+
+    <html>
+      <head>
+        <title><%= title %></title>
+      </head>
+      <body>
+        <img src="logo.png" alt="Site Logo">
+        <%= yield %>
+      </body>
+    </html>
 
 ## Custom helper methods and instance variables
 
